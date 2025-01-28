@@ -1,6 +1,6 @@
 import { User } from "@/app/types";
 
-const BASE_URL = "https://jsonplaceholder.typicode.com/Users";
+const BASE_URL = "http://localhost:3001/users";
 
 export async function getUsers() {
   await new Promise((resolve) => setTimeout(resolve, 1000));
