@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-query";
 import { updateUser, getUsers } from "../api";
 import { User } from "@/app/types";
+import { toast } from "sonner";
 
 export function Users() {
   const queryClient = useQueryClient();
@@ -17,6 +18,9 @@ export function Users() {
   });
   const updateUserMutation = useMutation({
     mutationFn: (data: User) => updateUser(data.id, data),
+    onError: () => {
+      toast.error("Failed to update user");
+    },
     onSettled: () => {
       // OPTION 1: Replace the updated user in the cache
       // if (newUser) {
@@ -28,6 +32,7 @@ export function Users() {
 
       // OPTION 2: Invalidate the cache
       queryClient.invalidateQueries({ queryKey: ["users", "list"] });
+      toast.success("User updated successfully");
     },
   });
 

@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-query";
 import { updateUser, getUsers } from "../api";
 import { User } from "@/app/types";
+import { toast } from "sonner";
 
 export function Users() {
   const queryClient = useQueryClient();
@@ -37,9 +38,12 @@ export function Users() {
         ["users", "list"],
         context ? context.previousUsers : []
       );
+
+      toast.error("Failed to update user");
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["users", "list"] });
+      toast.success("User updated successfully");
     },
   });
 
