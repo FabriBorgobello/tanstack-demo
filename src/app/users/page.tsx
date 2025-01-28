@@ -6,8 +6,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { Second } from "./components/second";
-import { Users } from "./components/users";
+import { Users } from "./components/users-basic";
 
 export default async function UsersPage() {
   const queryClient = new QueryClient();
@@ -27,11 +26,6 @@ export default async function UsersPage() {
           </Suspense>
         </ErrorBoundary>
         <Actions />
-        <ErrorBoundary fallback={<div>Something went wrong</div>}>
-          <Suspense fallback={<div>Loading...</div>}>
-            <Second />
-          </Suspense>
-        </ErrorBoundary>
       </div>
     </HydrationBoundary>
   );

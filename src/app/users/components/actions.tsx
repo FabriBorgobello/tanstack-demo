@@ -10,8 +10,7 @@ export function Actions() {
       <button
         className="p-4 bg-white cursor-pointer border border-gray-300 rounded-lg text-black"
         onClick={() => {
-          console.log("Invalidate Query");
-          queryClient.invalidateQueries({ queryKey: ["users"] });
+          queryClient.invalidateQueries({ queryKey: ["users", "list"] });
         }}
       >
         Invalidate Query
