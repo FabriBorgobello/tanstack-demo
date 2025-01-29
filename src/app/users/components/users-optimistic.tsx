@@ -8,6 +8,7 @@ import {
 import { updateUser, getUsers } from "../api";
 import { User } from "@/app/types";
 import { toast } from "sonner";
+import { Switch } from "./switch";
 
 export function Users() {
   const queryClient = useQueryClient();
@@ -22,7 +23,7 @@ export function Users() {
       // Cancel any outgoing refetches
       await queryClient.cancelQueries({ queryKey: ["users", "list"] });
       // Snapshot the previous value (for rollback)
-      const previousUsers = queryClient.getQueryData(["users", "list"]);
+      const previousUsers = queryClient.getQueryData<User[]>(["users", "list"]);
       // Optimistically update the cache
       queryClient.setQueryData(["users", "list"], (old: User[]) => {
         return old.map((user) =>
@@ -41,9 +42,9 @@ export function Users() {
 
       toast.error("Failed to update user");
     },
-    onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["users", "list"] });
+    onSuccess: () => {
       toast.success("User updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["users", "list"] });
     },
   });
 
@@ -54,7 +55,7 @@ export function Users() {
           <tr>
             <th className="p-2">Name</th>
             <th className="p-2">Email</th>
-            <th className="p-2">Actions</th>
+            <th className="p-2">Active</th>
           </tr>
         </thead>
         <tbody>
@@ -63,17 +64,12 @@ export function Users() {
               <td className="p-2">{user.name}</td>
               <td className="p-2">{user.email}</td>
               <td className="p-2">
-                <button
-                  className="p-2 bg-red-500 text-white rounded ml-2"
-                  onClick={() =>
-                    updateUserMutation.mutate({
-                      ...user,
-                      name: `${user.name} - [UPDATED]`,
-                    })
+                <Switch
+                  value={user.active}
+                  onChange={(value) =>
+                    updateUserMutation.mutate({ ...user, active: value })
                   }
-                >
-                  Update
-                </button>
+                />
               </td>
             </tr>
           ))}

@@ -8,6 +8,7 @@ import {
 import { updateUser, getUsers } from "../api";
 import { User } from "@/app/types";
 import { toast } from "sonner";
+import { Switch } from "./switch";
 
 export function Users() {
   const queryClient = useQueryClient();
@@ -21,7 +22,7 @@ export function Users() {
     onError: () => {
       toast.error("Failed to update user");
     },
-    onSettled: () => {
+    onSuccess: () => {
       // OPTION 1: Replace the updated user in the cache
       // if (newUser) {
       //   console.log(newUser);
@@ -43,7 +44,7 @@ export function Users() {
           <tr>
             <th className="p-2">Name</th>
             <th className="p-2">Email</th>
-            <th className="p-2">Actions</th>
+            <th className="p-2">Active</th>
           </tr>
         </thead>
         <tbody>
@@ -52,17 +53,12 @@ export function Users() {
               <td className="p-2">{user.name}</td>
               <td className="p-2">{user.email}</td>
               <td className="p-2">
-                <button
-                  className="p-2 bg-red-500 text-white rounded ml-2"
-                  onClick={() =>
-                    updateUserMutation.mutate({
-                      ...user,
-                      name: `${user.name} - [UPDATED]`,
-                    })
+                <Switch
+                  value={user.active}
+                  onChange={(value) =>
+                    updateUserMutation.mutate({ ...user, active: value })
                   }
-                >
-                  Update
-                </button>
+                />
               </td>
             </tr>
           ))}

@@ -14,6 +14,7 @@ export type User = {
     };
   };
   phone: string;
+  active: boolean;
   website: string;
   company: {
     name: string;
